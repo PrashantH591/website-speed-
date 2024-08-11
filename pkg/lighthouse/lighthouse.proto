@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package lighthouse;
+
+option go_package = "github.com/websu-io/websu/pkg/lighthouse";
+
+service LighthouseService {
+  rpc Run (LighthouseRequest) returns (LighthouseResult) {}
+}
+
+message LighthouseRequest {
+  string url = 1;
+  repeated string options = 2;
+  repeated string chromeflags  = 3;
+}
+
+message LighthouseResult {
+  bytes stdout  = 1;
+}

@@ -1,0 +1,150 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Run lighthouse as a service",
+        "title": "Websu API",
+        "contact": {},
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/",
+    "paths": {
+        "/reports": {
+            "post": {
+                "description": "Run a lighthouse audit to generate a report. The field `raw_json` contains the\nJSON output returned from lighthouse as a string.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create a Lighthouse Report",
+                "parameters": [
+                    {
+                        "description": "Lighthouse parameters to generate the report",
+                        "name": "ReportRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.ReportRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/api.Report"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "api.AuditResult": {
+            "type": "object",
+            "properties": {
+                "DisplayValue": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "numericUnit": {
+                    "type": "string"
+                },
+                "numericValue": {
+                    "type": "number"
+                },
+                "score": {
+                    "type": "number"
+                },
+                "scoreDisplayMode": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.Report": {
+            "type": "object",
+            "properties": {
+                "audit_results": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/api.AuditResult"
+                    }
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "form_factor": {
+                    "description": "Optional parameter, possible values are desktop or mobile. If unset will default to desktop",
+                    "type": "string",
+                    "example": "desktop"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "description": "Optional parameter, default location will be used if not set",
+                    "type": "string",
+                    "example": "australia-southeast1"
+                },
+                "performance_score": {
+                    "type": "number"
+                },
+                "raw_json": {
+                    "description": "RawJSON contains the lighthouse JSON result",
+                    "type": "string"
+                },
+                "throughput_kbps": {
+                    "description": "Optional parameter, by default will be set to 1000 if omitted",
+                    "type": "integer",
+                    "example": 50000
+                },
+                "url": {
+                    "description": "Required parameter the URL of the website",
+                    "type": "string",
+                    "example": "https://www.google.com"
+                }
+            }
+        },
+        "api.ReportRequest": {
+            "type": "object",
+            "properties": {
+                "form_factor": {
+                    "description": "Optional parameter, possible values are desktop or mobile. If unset will default to desktop",
+                    "type": "string",
+                    "example": "desktop"
+                },
+                "location": {
+                    "description": "Optional parameter, default location will be used if not set",
+                    "type": "string",
+                    "example": "australia-southeast1"
+                },
+                "throughput_kbps": {
+                    "description": "Optional parameter, by default will be set to 1000 if omitted",
+                    "type": "integer",
+                    "example": 50000
+                },
+                "url": {
+                    "description": "Required parameter the URL of the website",
+                    "type": "string",
+                    "example": "https://www.google.com"
+                }
+            }
+        }
+    }
+}

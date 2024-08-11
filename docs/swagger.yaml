@@ -1,0 +1,108 @@
+basePath: /
+definitions:
+  api.AuditResult:
+    properties:
+      DisplayValue:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      numericUnit:
+        type: string
+      numericValue:
+        type: number
+      score:
+        type: number
+      scoreDisplayMode:
+        type: string
+      title:
+        type: string
+    type: object
+  api.Report:
+    properties:
+      audit_results:
+        additionalProperties:
+          $ref: '#/definitions/api.AuditResult'
+        type: object
+      created_at:
+        type: string
+      form_factor:
+        description: Optional parameter, possible values are desktop or mobile. If
+          unset will default to desktop
+        example: desktop
+        type: string
+      id:
+        type: string
+      location:
+        description: Optional parameter, default location will be used if not set
+        example: australia-southeast1
+        type: string
+      performance_score:
+        type: number
+      raw_json:
+        description: RawJSON contains the lighthouse JSON result
+        type: string
+      throughput_kbps:
+        description: Optional parameter, by default will be set to 1000 if omitted
+        example: 50000
+        type: integer
+      url:
+        description: Required parameter the URL of the website
+        example: https://www.google.com
+        type: string
+    type: object
+  api.ReportRequest:
+    properties:
+      form_factor:
+        description: Optional parameter, possible values are desktop or mobile. If
+          unset will default to desktop
+        example: desktop
+        type: string
+      location:
+        description: Optional parameter, default location will be used if not set
+        example: australia-southeast1
+        type: string
+      throughput_kbps:
+        description: Optional parameter, by default will be set to 1000 if omitted
+        example: 50000
+        type: integer
+      url:
+        description: Required parameter the URL of the website
+        example: https://www.google.com
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Run lighthouse as a service
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Websu API
+  version: "1.0"
+paths:
+  /reports:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Run a lighthouse audit to generate a report. The field `raw_json` contains the
+        JSON output returned from lighthouse as a string.
+      parameters:
+      - description: Lighthouse parameters to generate the report
+        in: body
+        name: ReportRequest
+        required: true
+        schema:
+          $ref: '#/definitions/api.ReportRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/api.Report'
+            type: array
+      summary: Create a Lighthouse Report
+swagger: "2.0"
